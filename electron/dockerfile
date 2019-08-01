@@ -1,0 +1,15 @@
+FROM python:3-alpine
+RUN apk add --no-cache libffi openssl \
+    && apk add --no-cache --virtual .build-deps \
+           gcc \
+           libc-dev \
+           libffi-dev \
+           openssl-dev \
+    && pip install --upgrade pip \
+    && pip install python-telegram-bot pymongo    
+
+WORKDIR /usr/src/app
+
+COPY /bot .    
+
+CMD [ "python", "./main.py" ]
