@@ -10,12 +10,18 @@ from time import localtime,strftime
 
 def send(bot, update):
     flag = 0
-    if update.message.text == "📜":
+    message = update.message.text
+    if message == "📜":
         flag = 1
         get_keyboard(bot,update, flag)
-    elif update.message.text == "📉":
+    elif message == "📉":
         flag = 2
-        get_keyboard(bot,update, flag)        
+        get_keyboard(bot,update, flag)
+    elif message == "🌡":
+        button(bot, update, "temp")
+    elif message == "⚗️":
+        button(bot, update, 'humidity')
+
 
 
 
@@ -38,23 +44,23 @@ def get_keyboard(bot, update, flag):
         update.message.reply_text('Please choose another option')
 
     elif flag == 1:
-        keyboard = [[InlineKeyboardButton("🌡", callback_data='temp'),
-                    InlineKeyboardButton("⚗️", callback_data='humidity')],
-                    [InlineKeyboardButton("🗜️", callback_data='preassure'),
-                    InlineKeyboardButton("🏭", callback_data='CO2')]]
-        reply_markup = InlineKeyboardMarkup(keyboard)
+        keyboard = [[KeyboardButton("🌡"),
+                    KeyboardButton("⚗️")],
+                    [KeyboardButton("🗜️", callback_data='preassure'),
+                    KeyboardButton("🏭", callback_data='CO2')]]
+        reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard = True)
         update.message.reply_text('Please choose option:', reply_markup=reply_markup)
 
     elif flag == 2:
-        keyboard = [[InlineKeyboardButton("5 minuts", callback_data=5),
-                    InlineKeyboardButton("15 minuts", callback_data=15),
-                    InlineKeyboardButton("30 hours", callback_data=30)
-                    InlineKeyboardButton("1 hours", callback_data=60)],
-                    [InlineKeyboardButton("3 hours", callback_data=180),
-                    InlineKeyboardButton("6 hours", callback_data=360),
-                    InlineKeyboardButton("9 hours", callback_data=540),
-                    InlineKeyboardButton("12 hours", callback_data=720),]]
-        reply_markup = InlineKeyboardMarkup(keyboard)
+        keyboard = [[KeyboardButton("5 minuts", callback_data=5),
+                    KeyboardButton("15 minuts", callback_data=15),
+                    KeyboardButton("30 hours", callback_data=30),
+                    KeyboardButton("1 hours", callback_data=60)],
+                    [KeyboardButton("3 hours", callback_data=180),
+                    KeyboardButton("6 hours", callback_data=360),
+                    KeyboardButton("9 hours", callback_data=540),
+                    KeyboardButton("12 hours", callback_data=720),]]
+        reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard = True)
         update.message.reply_text('Please choose option:', reply_markup=reply_markup)
 
 
@@ -64,21 +70,21 @@ def get_keyboard(bot, update, flag):
 
 
 
-def button(bot, update):
-    query = update.callback_query
+def button(bot, update ,message):
     all_tables = get_last()
     param = ""
-    if query.data == 'CO2':
-        text = "home : {}{} ".format(all_tables[query.data],"ppm")
+    if message == 'CO2':
+        text = "home : {}{} ".format(all_tables[message],"ppm")
     else:
-        if query.data == "temp":
+        if message == "temp":
             param = "°C"
-        elif query.data == 'humidity':
+        elif message == 'humidity':
             param = "%"
-        elif query.data == "preassure":
+        elif message == "preassure":
             param ="mmHg"
-        text = "street : home \n{:5.0f}{} : {:5.0f}{}".format( all_tables[query.data + "_i"], param, all_tables[query.data], param)
-    query.edit_message_text(text=text)
+        text = "street : home \n{:5.0f}{} : {:5.0f}{}".format( all_tables[message + "_i"], param, all_tables[message], param)
+    update.message.reply_text(text=text)
+    start(bot, update)
 
 # Command /start & /help
 
@@ -96,7 +102,7 @@ def error(bot, update):
 
 #Work with mongodb
 
-client = MongoClient(host=['mondog:27017'])
+client = MongoClient(host=['v140616.hosted-by-vdsina.ru:27017'])
 db = client["bot_local"]    
 posts = db.archive
 def get_last():
@@ -104,7 +110,7 @@ def get_last():
     for post in posts.find():
         try:
             six_press.append(post)
-            print(six_press)
+
         except KeyError:
             continue  
     return six_press[-1]
@@ -116,7 +122,6 @@ def main():
     dp = updater.dispatcher    
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(MessageHandler(Filters.text, send))
-    dp.add_handler(CallbackQueryHandler(button))
     dp.add_handler(CommandHandler('help', help))
     dp.add_error_handler(error)
     updater.start_polling()
