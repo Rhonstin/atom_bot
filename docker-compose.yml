@@ -13,9 +13,9 @@ services:
     volumes:
       - /data/db:/data/db
       - /data/configdb:/data/configdb
-  telegr:
-    build:
-      context: ~/atom/electron
-    depends_on:
-      - mondog
+#  telegr:
+#    build:
+#      context: ./electron
+#    depends_on:
+#      - mondog
 
