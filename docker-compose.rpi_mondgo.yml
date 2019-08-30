@@ -1,0 +1,16 @@
+version: '2'
+services:
+  mqtt:
+    image: eclipse-mosquitto:latest
+    ports:
+      - 1883:1883
+      - 9001:9001
+    command: mosquitto
+  mondog:
+    image: andresvidal/rpi3-mongodb3:latest
+    ports:
+      - 27017:27017
+    command: bash -c "mongod --repair && mongod"
+    volumes:
+      - /data/db:/data/db
+      - /data/configdb:/data/configdb
