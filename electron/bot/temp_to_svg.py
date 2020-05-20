@@ -1,8 +1,7 @@
-import csv, pygal , os.path , os
+import pygal , os.path
 from pygal.style import TurquoiseStyle
 from mongodbcm import get_last
 import GLOBAL as v
-from time import sleep,time
 def generate_day_png(name,paths):
     archive  = get_last(144,name)
     chart = pygal.Line(style=TurquoiseStyle)
