@@ -1,10 +1,8 @@
 #from temp_to_svg import generate_day_png,generate_co2
 import logging
 from pymongo import MongoClient
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters , CallbackQueryHandler
-from telegram.error import NetworkError, Unauthorized
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup,KeyboardButton,ReplyKeyboardRemove
-from time import localtime,strftime
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import ReplyKeyboardMarkup,KeyboardButton
 
 
 

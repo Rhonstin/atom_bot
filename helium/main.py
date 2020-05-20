@@ -1,5 +1,5 @@
 import schedule
-from time import sleep,time,localtime,strftime
+from time import localtime,strftime
 from measure import *
 import GLOBAL as v
 from pymongo import MongoClient
