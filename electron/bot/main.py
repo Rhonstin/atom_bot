@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 
 
 
-def get_keyboard(bot, update, flag):
+def get_keyboard(_bot, update, flag):
     if flag == 0:
         update.message.reply_text('Please choose another option')
 
@@ -88,15 +88,15 @@ def button(bot, update ,message):
 
 # Command /start & /help
 
-def start(bot, update):
+def start(_bot, update):
     keyboard = [[KeyboardButton("📜")],[KeyboardButton("📉")]]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard = True)
     update.message.reply_text('Please choose option:', reply_markup=reply_markup)
 
-def help(bot, update):
+def help(_bot, update):
     update.message.reply_text("Use /start to test this bot.")
 
-def error(bot, update):
+def error(_bot, update):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
