@@ -4,7 +4,7 @@ cached-property==1.5.1
 certifi==2018.8.24
 cffi==1.12.3
 chardet==3.0.4
-cryptography==2.6.1
+cryptography==3.2
 docopt==0.6.2
 entrypoints==0.3
 idna==2.6
